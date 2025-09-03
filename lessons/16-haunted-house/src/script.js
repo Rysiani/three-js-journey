@@ -18,12 +18,98 @@ const scene = new THREE.Scene()
 /**
  * House
  */
-// Temporary sphere
-const sphere = new THREE.Mesh(
-    new THREE.SphereGeometry(1, 32, 32),
-    new THREE.MeshStandardMaterial({ roughness: 0.7 })
+const house = new THREE.Group()
+scene.add(house)
+
+// Walls
+const walls = new THREE.Mesh(
+    new THREE.BoxGeometry(4, 2.5, 4),
+    new THREE.MeshStandardMaterial()
 )
-scene.add(sphere)
+walls.position.y = walls.geometry.parameters.height / 2
+house.add(walls)
+
+// Roof
+const roof = new THREE.Mesh(
+    new THREE.ConeGeometry(3.5, 1.5, 4),
+    new THREE.MeshStandardMaterial()
+)
+roof.position.y = walls.geometry.parameters.height + roof.geometry.parameters.height / 2
+roof.rotation.y = Math.PI / 4
+
+house.add(roof)
+
+// Door
+const door = new THREE.Mesh(
+    new THREE.PlaneGeometry(2.2, 2.2),
+    new THREE.MeshStandardMaterial()
+)
+door.position.y = 1
+door.position.z = walls.geometry.parameters.depth / 2 + 0.01
+house.add(door)
+
+// Bushes
+const bushesGeometry = new THREE.SphereGeometry(1, 16, 16)
+const bushesMaterial = new THREE.MeshStandardMaterial()
+
+const bush1 = new THREE.Mesh(bushesGeometry, bushesMaterial)
+bush1.position.set(0.8, 0.2, 2.2)
+bush1.scale.set(0.5, 0.5, 0.5)
+
+const bush2 = new THREE.Mesh(bushesGeometry, bushesMaterial)
+bush2.position.set(1.4, 0.1, 2.1)
+bush2.scale.set(0.25, 0.25, 0.25)
+
+const bush3 = new THREE.Mesh(bushesGeometry, bushesMaterial)
+bush3.position.set(-0.8, 0.1, 2.2)
+bush3.scale.set(0.4, 0.4, 0.4)
+
+const bush4 = new THREE.Mesh(bushesGeometry, bushesMaterial)
+bush4.position.set(-1, 0.05, 2.6)
+bush4.scale.set(0.15, 0.15, 0.15)
+house.add(bush1, bush2, bush3, bush4)
+
+// Graves
+const gravesGeometry = new THREE.BoxGeometry(0.6, 1, 0.2)
+const gravesMaterial = new THREE.MeshStandardMaterial()
+
+const graves = new THREE.Group()
+scene.add(graves)
+
+for (let i = 0; i < 30; i++) {
+    // random position and rotation
+    const angle = Math.random() * Math.PI * 2
+    const radius = Math.random() * 4 + 3.2
+
+    const x = Math.cos(angle) * radius
+    const z = Math.sin(angle) * radius
+
+    // random rotation
+    const rotation = Math.random() * Math.PI * 8
+
+
+    const grave = new THREE.Mesh(gravesGeometry, gravesMaterial)
+    grave.position.set(x,0,z)
+    grave.rotation.y = (Math.random() - 0.5) * 0.4
+    grave.rotation.z = (Math.random() - 0.5) * 0.4
+    grave.rotation.x = (Math.random() - 0.5) * 0.4
+
+    graves.add(grave)
+
+}
+
+
+/**
+ * Floor
+ */
+const floor = new THREE.Mesh(
+    new THREE.PlaneGeometry(20, 20),
+    new THREE.MeshStandardMaterial()
+)
+floor.rotation.x = - Math.PI * 0.5
+
+scene.add(floor)
+
 
 /**
  * Lights
